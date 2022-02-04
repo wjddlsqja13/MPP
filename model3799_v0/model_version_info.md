@@ -6,12 +6,11 @@ __tv0.10__ <br>
 - input_len = 15
 - dropout_rate = 0.1
 - hidden_size = 40
-- loss fn = MSE
-- optim = adadelta
-  
-- batch size =
-- epoch =
-- log batch =
-- lr = 
+- lr = 0.08
+- criterion = nn.MSELoss()
+- optimizer_option = 'Adadelta'
+- batch_size = 100
+- epochs = 30
+- log_batch = 50
   
 __tv0.11__

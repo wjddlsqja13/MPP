@@ -1,12 +1,12 @@
 ## TODOS (MD)
 
-- __tv0.11__
-- __validation tool__
+- __tv0.11__ 
+- __initial data collection__ 
+- __mock_trading.py (after v1 is done)__
 - v0: Original 3799
 - v1: Improve interpolation model network
 - Add volatility to FE/make_features.py - quantFeatures
 - Find more quantFeatures
-- Model Testing Code
   
 ## TODOS (AnV)
   
@@ -35,18 +35,5 @@
 - 26 Jan 2022: Pytorch is not work for python 3.10 --> downgraded to 3.9.5
 - 27 Jan 2022: (MD) model3799_v0/3799_v0.py done
 - 27 Jan 2022: (MD) tv0.10 done
-
- 
-## Work Progress
-__Ongoing:__ <br>
-- TODO: tv0.11, validation_tool.py, 
-  
-__Completed (For Now):__ <br>
-- FE/make_features.py
-- FE/make_preprocessed.py
-- data/raw_Data
-- data/preprocessed_data {[minute5, 7d, quant], [minute5, 3d, quant], [minute5, 24h, quant]}
-- utils: tickers, createDirectory, firstCSVFile, parse_csv_quant
-- FE/make_traintest.py
-- data/model_input
-- model3799_v0/3799_v0.py
+- 30 Jan 2022: (MD) Tensorboard implemented
+- 30 Jan 2022: model_report_v0.py done

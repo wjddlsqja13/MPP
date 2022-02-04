@@ -1,6 +1,4 @@
-# MPP_Phase1_forPublic
-
-This repository is opened for public <br>
+# MPP_Phase1
   
 ## Develing Aim
 1. Model Development (MD)

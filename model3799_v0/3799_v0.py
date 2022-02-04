@@ -16,6 +16,9 @@ import torch.optim as optim
 #from torch.utils.tensorboard import SummaryWriter
 import torch.nn as nn
 
+from tensorboardX import SummaryWriter
+
+
 #-----------------------------Here Should Be Modified-------------------------------------
 # Parameters
 # a. Tickers
@@ -32,7 +35,7 @@ hidden_size = 40
 lr = 0.08
 criterion = nn.MSELoss()
 optimizer_option = 'Adadelta'
-batch_size = 20
+batch_size = 100
 epochs = 30
 log_batch = 50
 #------------------------------------------------------------------------------------------
@@ -149,7 +152,7 @@ def attach_model():
 #-------------------------------------------------------------------------------------------------
 
 #----------------------------------------Train Model----------------------------------------------
-def trainModel(model, device, trainloader, optimizer, criterion, ticker):
+def trainModel(model, device, trainloader, optimizer, criterion, ticker, epoch, writer):
     model.to(device)
     model.train()
     running_loss = 0.0
@@ -162,15 +165,15 @@ def trainModel(model, device, trainloader, optimizer, criterion, ticker):
         loss = criterion(outputs, true_val)
         loss.backward()
         optimizer.step()
+        # Tensorboard-------------------------------------------
+        writer.add_scalar('Training loss {} {}'.format(version, ticker), loss.item(), len(trainloader) * epoch + i) 
+        #-------------------------------------------------------
         total += true_val.size(0)
         running_loss += loss.item()
-        # if i % log_batch == log_batch - 1:
-        #     avg_loss = running_loss / log_batch
-        #     print('Epoch: %d/%d Batch: %5d running loss: %.3f' % (epoch + 1, epochs, i + 1, avg_loss))
-        #     running_loss = 0.0
         sDir = dirNow + "/{}/{}/model/".format(version, ticker)
         utils.createDirectory(sDir)
         torch.save(model.state_dict(), sDir+"model3799_{}_{}.pth".format(version, ticker))
+        writer.close()
 #-------------------------------------------------------------------------------------------------
 
 #-----------------------------------------Test Model----------------------------------------------
@@ -204,11 +207,18 @@ def testModel(version, ticker, option):
 if __name__ == '__main__':
     
     for ticker in ticker_names:
+        #Log Dir
+        logDir = dirNow + "/{}/{}/log/".format(version, ticker)
+        writer = SummaryWriter(logDir) #Tensorboard
+
+        #Dataloader + Attach model
         train_data = dataset(version, ticker, 'train')
         trainloader = torch.utils.data.DataLoader(train_data, batch_size=batch_size, shuffle=True)
         model, device, optimizer = attach_model()
 
+        #Train
         for epoch in range(epochs):
-            trainModel(model, device, trainloader, optimizer, criterion, ticker)
+            trainModel(model, device, trainloader, optimizer, criterion, ticker, epoch, writer)
 
+        #Retrieve test predictions
         testModel(version, ticker, 'test')
